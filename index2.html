@@ -1,0 +1,313 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Constitution Quiz</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .top-ribbon {
+            background-color: #0074e4;
+            color: white;
+            padding: 10px;
+            text-align: center;
+        }
+        .quiz-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            position: relative;
+        }
+        .flag-image {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 100px;
+        }
+        .cos-image {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            width: 400px; /* 4 times bigger */
+        }
+        .play-again-button {
+            position: absolute;
+            top: 10px;
+            right: 70px;
+        }
+        .answer {
+            display: flex;
+            align-items: center;
+        }
+        .correct-answer {
+            color: green;
+            margin-left: 10px;
+        }
+        .incorrect-answer {
+            color: red;
+            margin-left: 10px;
+        }
+        .question {
+            font-weight: bold;
+        }
+        .responsive-image {
+        width: 100%;
+        height: auto;
+}
+    </style>
+</head>
+<body>
+    <div class="top-ribbon">
+        <h2>Welcome to the Article 5 Quiz</h2>
+    </div>
+    <img class="flag-image" src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/de/Flag_of_the_United_States.png/800px-Flag_of_the_United_States.png" alt="CT Flag">
+    <img class="cos-image" src="https://front-assets.conventionofstates.com/images/cosaction/logo/cos-home-logo.png" alt="Convention of States Emblem">
+    
+    <div class="quiz-container">
+        <button class="play-again-button" id="playAgainButton" style="display: none;">Play Again</button>
+        <p id="question"></p>
+        <form id="quiz-form">
+            <label>
+    <input type="radio" name="answer" value="0"> <span id="option-a"></span>
+</label><br>
+<label>
+    <input type="radio" name="answer" value="1"> <span id="option-b"></span>
+</label><br>
+<label>
+    <input type="radio" name="answer" value="2"> <span id="option-c"></span>
+</label><br>
+<label>
+    <input type="radio" name="answer" value="3"> <span id="option-d"></span>
+</label><br><br>
+
+            <button type="button" id="submit-button">Submit</button>
+            <button type="button" id="next-button" style="display: none;">Next</button>
+        </form>
+        <p id="result"></p>
+        <p id="score"></p>
+        <div id="answers-container"></div>
+    </div>
+
+    <script>
+        // Define quiz questions
+        const questions = [
+    {
+        question: "What does Article 5 of the U.S. Constitution primarily address?",
+        options: ["The amendment process", "The role of the President", "The powers of Congress", "The structure of the judiciary"],
+        answer: "The amendment process"
+    },
+    {
+        question: "How many ways are there to propose amendments to the Constitution, as described in Article 5?",
+        options: ["2", "1", "3", "4"],
+        answer: "2"
+    },
+    {
+        question: "According to Article 5, who can propose amendments to the U.S. Constitution?",
+        options: ["Congress and state legislatures", "Only the President", "Only Congress", "State governors"],
+        answer: "Congress and state legislatures"
+    },
+    {
+        question: "How many methods for ratifying amendments are outlined in Article 5?",
+        options: ["2", "1", "3", "4"],
+        answer: "2"
+    },
+    {
+        question: "According to Article 5, what is the maximum time period allowed for states to ratify a proposed amendment?",
+        options: ["10 years", "1 year", "5 years", "20 years"],
+        answer: "10 years"
+    },
+    {
+        question: "Which method of proposing amendments outlined in Article 5 involves a two-thirds vote in both houses of Congress?",
+        options: ["Congressional proposal", "State legislature proposal", "Constitutional convention proposal", "Presidential proposal"],
+        answer: "Congressional proposal"
+    },
+    {
+        question: "What is required for a proposed amendment to be ratified if it was originally proposed by state legislatures?",
+        options: ["A three-fourths majority vote in state legislatures", "A majority vote in Congress", "A national referendum", "A two-thirds majority vote in the Senate"],
+        answer: "A three-fourths majority vote in state legislatures"
+    },
+    {
+        question: "Under what conditions can a constitutional convention be called to propose amendments, as stated in Article 5?",
+        options: ["When two-thirds of state legislatures apply for it", "Whenever Congress wishes", "Whenever the President requests it", "Whenever the Supreme Court deems it necessary"],
+        answer: "When two-thirds of state legislatures apply for it"
+    },
+    {
+        question: "What is the President's role in the formal amendment process described in Article 5?",
+        options: ["The President has no direct role in the process", "The President can veto proposed amendments", "The President can propose amendments directly to Congress", "The President signs ratified amendments into law"],
+        answer: "The President has no direct role in the process"
+    },
+    {
+        question: "What happens to proposed amendments that do not receive the required ratification by the states within the specified time frame?",
+        options: ["They are considered failed and have no effect", "They become law automatically", "They are sent to Congress for further review", "They are referred to the President for final decision"],
+        answer: "They are considered failed and have no effect"
+    },
+    {
+        question: "What distinguishes the process for amending the Constitution, as described in Article 5, from the process for passing regular laws?",
+        options: ["The involvement of state legislatures", "The requirement for a two-thirds majority in both houses of Congress", "The President's veto power", "The absence of a ratification requirement"],
+        answer: "The involvement of state legislatures"
+    },
+    {
+        question: "What is a limitation of a Convention of States as outlined in Article V of the U.S. Constitution?",
+        options: ["It can only propose amendments that have already been passed by two-thirds of both houses of Congress", "It can propose any type of amendment, including those that alter the fundamental structure of the Constitution", "It is limited to proposing amendments that fall within the scope of the resolutions passed by the applying states", "It has the power to directly change state constitutions without state ratification"],
+        answer: "It is limited to proposing amendments that fall within the scope of the resolutions passed by the applying states"
+    }
+];
+
+
+        // Shuffle questions randomly
+        function shuffleQuestions(questions) {
+            for (let i = questions.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [questions[i], questions[j]] = [questions[j], questions[i]];
+            }
+	}
+
+
+// Shuffle both questions and their options
+function prepareQuiz(questions) {
+    shuffleQuestions(questions); // Shuffle questions
+    questions.forEach(question => {
+        // Shuffle options for each question
+        shuffleQuestions(question.options);
+    });
+}
+
+// Initialize quiz
+let currentQuestionIndex = 0;
+let score = 0;
+const userAnswers = []; // Array to store user's answers
+prepareQuiz(questions); // Prepare the quiz with shuffled questions and options
+
+        // Function to reset the quiz state
+function resetQuiz() {
+    currentQuestionIndex = 0;
+    score = 0;
+    userAnswers.length = 0; // Reset the userAnswers array
+    const scoreElement = document.getElementById("score");
+    scoreElement.textContent = '';
+    const resultElement = document.getElementById("result");
+    resultElement.textContent = '';
+    const answersContainer = document.getElementById("answers-container");
+    answersContainer.innerHTML = ''; // Clear previous answers display
+    prepareQuiz(questions);
+    displayQuestion();
+    document.getElementById("playAgainButton").style.display = "none";
+}
+
+
+        // Display current question
+        function displayQuestion() {
+            const currentQuestion = questions[currentQuestionIndex];
+// Incrementing currentQuestionIndex by 1 for display purposes as array index starts at 0
+    document.getElementById("question").textContent = `Question ${currentQuestionIndex + 1}: ${currentQuestion.question}`;
+            //document.getElementById("question").textContent = currentQuestion.question;
+            document.getElementById("option-a").textContent = currentQuestion.options[0];
+            document.getElementById("option-b").textContent = currentQuestion.options[1];
+            document.getElementById("option-c").textContent = currentQuestion.options[2];
+            document.getElementById("option-d").textContent = currentQuestion.options[3];
+
+            // Clear selected answer and result
+            const answerOptions = document.getElementsByName("answer");
+            answerOptions.forEach(option => {
+                option.checked = false;
+            });
+            document.getElementById("result").textContent = "";
+
+            // Reset button visibility
+            document.getElementById("submit-button").style.display = "block";
+            document.getElementById("next-button").style.display = "none";
+        }
+
+        // Handle submit button click
+document.getElementById("submit-button").addEventListener("click", function () {
+    const currentQuestion = questions[currentQuestionIndex];
+    const selectedOption = document.querySelector('input[name="answer"]:checked');
+    const resultElement = document.getElementById("result");
+
+    if (selectedOption) {
+        const selectedAnswer = currentQuestion.options[selectedOption.value];
+        userAnswers[currentQuestionIndex] = selectedAnswer;
+        if (selectedAnswer === currentQuestion.answer) {
+            resultElement.textContent = "Correct!";
+            score++;
+        } else {
+            resultElement.textContent = `Incorrect. The correct answer is ${currentQuestion.answer}.`;
+        }
+        this.style.display = "none";
+        document.getElementById("next-button").style.display = "block";
+    } else {
+        resultElement.textContent = "Please select an answer.";
+    }
+});
+
+        // Handle next button click
+        document.getElementById("next-button").addEventListener("click", function () {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < questions.length) {
+                displayQuestion();
+            } else {
+                // Quiz is finished
+                document.getElementById("score").textContent = `Your Score: ${score}/${questions.length}`;
+                document.getElementById("playAgainButton").style.display = "block";
+                displayAnswers();
+            }
+        });
+
+	function displayAnswers() {
+    const answersContainer = document.getElementById("answers-container");
+    answersContainer.innerHTML = "<h2>Answers:</h2>";
+
+    // Create a table
+    const table = document.createElement("table");
+    table.style.width = '100%';
+    table.setAttribute('border', '1');
+    table.setAttribute('cellspacing', '0');
+    table.setAttribute('cellpadding', '5');
+
+    // Create the header row
+    let headerRow = table.insertRow();
+    headerRow.innerHTML = "<th>Question No.</th><th>Question</th><th>Your Answer</th><th>Correct Answer</th>";
+
+    questions.forEach((question, index) => {
+        const userAnswer = userAnswers[index];
+        const isCorrect = userAnswer === question.answer;
+
+        // Create a row for each question
+        let row = table.insertRow();
+        let cell1 = row.insertCell(0);
+        let cell2 = row.insertCell(1);
+        let cell3 = row.insertCell(2);
+        let cell4 = row.insertCell(3);
+
+        // Fill cells with data
+        cell1.innerHTML = `${index + 1}`;
+        cell2.innerHTML = question.question;
+        cell3.innerHTML = isCorrect ? 
+            `<span class="correct-answer">${userAnswer || "No answer"}</span>` : 
+            `<span class="incorrect-answer">${userAnswer || "No answer"}</span>`;
+        cell4.innerHTML = question.answer;
+    });
+
+    // Append the table to the container
+    answersContainer.appendChild(table);
+}
+
+
+
+
+
+        // Play Again button functionality
+        document.getElementById("playAgainButton").addEventListener("click", resetQuiz);
+
+        // Start the quiz
+        displayQuestion();
+    </script>
+</body>
+</html>
