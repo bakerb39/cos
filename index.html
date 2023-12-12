@@ -428,7 +428,7 @@ document.getElementById("submit-button").addEventListener("click", function () {
             resultElement.textContent = "Correct!";
             score++;
         } else {
-            resultElement.textContent = `Incorrect. The correct answer is ${currentQuestion.answer}.`;
+            resultElement.textContent = `Incorrect. The correct answer is:  ${currentQuestion.answer}.`;
         }
         this.style.display = "none";
         document.getElementById("next-button").style.display = "block";
